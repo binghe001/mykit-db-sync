@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <code>4500000001</code>
+    <source>
+        <url>jdbc:mysql://10.2.2.231:3306/guanxing_medical</url>
+        <username>root</username>
+        <password>root</password>
+        <dbtype>mysql</dbtype>
+        <driver>com.mysql.jdbc.Driver</driver>
+    </source>
+    <dest>
+        <url>jdbc:mysql://127.0.0.1:3306/guanxing_medical</url>
+        <username>root</username>
+        <password>root</password>
+        <dbtype>mysql</dbtype>
+        <driver>com.mysql.jdbc.Driver</driver>
+    </dest>
+    <jobs>
+        <job>
+            <name>1</name>
+            <cron>0/300 * * * * ?</cron>
+            <srcSql>select user_id, account,password from client_user</srcSql>
+            <destTable>client_user</destTable>
+            <destTableFields>user_id, account, password</destTableFields>
+            <destTableKey>user_id</destTableKey>
+            <destTableUpdate>account, password</destTableUpdate>
+        </job>
+    </jobs>
+</root>
