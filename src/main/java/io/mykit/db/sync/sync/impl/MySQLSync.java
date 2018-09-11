@@ -18,6 +18,7 @@ package io.mykit.db.sync.sync.impl;
 import io.mykit.db.sync.entity.JobInfo;
 import io.mykit.db.sync.sync.DBSync;
 import io.mykit.db.sync.utils.Tool;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,6 +32,7 @@ import java.sql.SQLException;
  * @version 1.0.0
  */
 public class MySQLSync extends AbstractDBSync implements DBSync {
+    private Logger logger = Logger.getLogger(MySQLSync.class);
 
     @Override
     public String assembleSQL(String srcSql, Connection conn, JobInfo jobInfo) throws SQLException {
@@ -70,6 +72,7 @@ public class MySQLSync extends AbstractDBSync implements DBSync {
                 return new StringBuffer("alter table ").append(destTable).append(" add constraint ").append(uniqueName).append(" unique (").append(destTableKey).append(");").append(sql.toString())
                         .append(";alter table ").append(destTable).append(" drop index ").append(uniqueName).toString();
             }
+            logger.debug(sql.toString());
             return sql.toString();
         }
         return null;

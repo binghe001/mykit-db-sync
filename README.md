@@ -38,8 +38,10 @@ mykit中分离出的强大数据数据库同步工具——mykit-db-sync
 > java -jar mykit-db-sync-1.0.0.jar
 
 # 基本使用
-cat jobs.xml
-```xml
+
+### MySQL——>MySQL
+jobs.xml
+```
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
     <code>4500000001</code>
@@ -66,6 +68,40 @@ cat jobs.xml
             <destTableFields>user_id, account, password</destTableFields>
             <destTableKey>user_id</destTableKey>
             <destTableUpdate>account, password</destTableUpdate>
+        </job>
+    </jobs>
+</root>
+```
+
+### SQLServer——>SQLServer
+jobs.xml
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <code>4500000001</code>
+    <source>
+        <url>jdbc:sqlserver://10.2.2.243:1433;DatabaseName=AC</url>
+        <username>sa</username>
+        <password>123456</password>
+        <dbtype>sqlserver</dbtype>
+        <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
+    </source>
+    <dest>
+        <url>jdbc:sqlserver://127.0.0.1:1433;DatabaseName=AC</url>
+        <username>sa</username>
+        <password>123456</password>
+        <dbtype>sqlserver</dbtype>
+        <driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</driver>
+    </dest>
+    <jobs>
+        <job>
+            <name>1</name>
+            <cron>0/20 * * * * ?</cron>
+            <srcSql>select id, name,phone, department, photopath, groupId, uid from t_user</srcSql>
+            <destTable>t_user</destTable>
+            <destTableFields>id, name,phone, department, photopath, groupId, uid</destTableFields>
+            <destTableKey>id</destTableKey>
+            <destTableUpdate>name,phone, department, photopath, groupId, uid</destTableUpdate>
         </job>
     </jobs>
 </root>

@@ -34,6 +34,6 @@ public class Main {
     public static void main(String[] args) {
         logger.info("同步数据开始===>>>" + DateUtils.parseDateToString(new Date(), DateUtils.DATE_TIME_FORMAT));
         DBSyncBuilder.builder().init().start();
-        logger.info("同步结束开始===>>>" + DateUtils.parseDateToString(new Date(), DateUtils.DATE_TIME_FORMAT));
+        logger.info("同步数据结束===>>>" + DateUtils.parseDateToString(new Date(), DateUtils.DATE_TIME_FORMAT));
     }
 }
