@@ -16,12 +16,13 @@
 package io.mykit.db.transfer.task;
 
 import io.mykit.db.common.constants.MykitDbSyncConstants;
+import io.mykit.db.common.db.DbConnection;
+import io.mykit.db.common.exception.MykitDbSyncException;
+import io.mykit.db.common.utils.DateUtils;
 import io.mykit.db.transfer.entity.DBInfo;
 import io.mykit.db.transfer.entity.JobInfo;
-import io.mykit.db.common.exception.MykitDbSyncException;
 import io.mykit.db.transfer.factory.DBSyncFactory;
 import io.mykit.db.transfer.sync.DBSync;
-import io.mykit.db.common.utils.DateUtils;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
@@ -30,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -39,7 +39,7 @@ import java.util.Date;
  * @description 同步数据库任务的具体实现
  * @version 1.0.0
  */
-public class JobTask implements Job {
+public class JobTask extends DbConnection implements Job {
     private final Logger logger = LoggerFactory.getLogger(JobTask.class);
 
     /**
@@ -86,39 +86,6 @@ public class JobTask implements Job {
             destoryConnection(inConn);
             this.logger.info("关闭目标数据库连接");
             destoryConnection(outConn);
-        }
-    }
-
-    /**
-     * 创建数据库连接
-     * @param db
-     * @return
-     */
-    private Connection createConnection(DBInfo db) {
-        try {
-            Class.forName(db.getDriver());
-            Connection conn = DriverManager.getConnection(db.getUrl(), db.getUsername(), db.getPassword());
-            conn.setAutoCommit(false);
-            return conn;
-        } catch (Exception e) {
-            this.logger.error(e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 关闭并销毁数据库连接
-     * @param conn
-     */
-    private void destoryConnection(Connection conn) {
-        try {
-            if (conn != null) {
-                conn.close();
-                conn = null;
-                this.logger.info("数据库连接关闭");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 }

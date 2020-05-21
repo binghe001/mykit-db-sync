@@ -13,7 +13,6 @@
 
     <properties>
         <jdbc.version>5.1.22</jdbc.version>
-        <dom4j.version>1.6.1</dom4j.version>
         <mssql.version>6.2.0.jre8</mssql.version>
     </properties>
 
@@ -22,12 +21,6 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${jdbc.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>${dom4j.version}</version>
         </dependency>
 
         <dependency>

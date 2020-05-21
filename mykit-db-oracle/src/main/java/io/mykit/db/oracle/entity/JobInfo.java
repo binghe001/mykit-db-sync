@@ -1,5 +1,5 @@
 /**
- * Copyright 2018-2118 the original author or authors.
+ * Copyright 2020-9999 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mykit.db.transfer.entity;
+package io.mykit.db.oracle.entity;
 
-import io.mykit.db.common.entity.BaseDBInfo;
+import io.mykit.db.common.entity.BaseJobInfo;
 
 /**
  * @author binghe
- * @description 数据库信息
  * @version 1.0.0
+ * @description 任务信息
  */
-public class DBInfo extends BaseDBInfo {
-    private static final long serialVersionUID = 3095305945250814263L;
+public class JobInfo extends BaseJobInfo {
+    private static final long serialVersionUID = 412999526500837002L;
 }

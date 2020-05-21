@@ -20,7 +20,7 @@ import java.io.Serializable;
 /**
  * @author binghe
  * @version 1.0.0
- * @description
+ * @description 基础数据库信息
  */
 public class BaseDBInfo implements Serializable {
     private static final long serialVersionUID = -5546462343272223569L;
@@ -33,6 +33,8 @@ public class BaseDBInfo implements Serializable {
     private String password;
     //数据库驱动
     private String driver;
+    //数据库类型(对应mysql还是sqlserver)
+    private String dbtype;
 
     public String getUrl() {
         return url;
@@ -64,5 +66,13 @@ public class BaseDBInfo implements Serializable {
 
     public void setDriver(String driver) {
         this.driver = driver;
+    }
+
+    public String getDbtype() {
+        return dbtype;
+    }
+
+    public void setDbtype(String dbtype) {
+        this.dbtype = dbtype;
     }
 }

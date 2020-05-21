@@ -31,6 +31,10 @@ public class MykitDbSyncConstants {
      * MySQL数据库
      */
     public static final String TYPE_DB_MYSQL = "mysql";
+    /**
+     * Oracle数据库
+     */
+    public static final String TYPE_DB_ORACLE = "oracle";
 
     /**
      * 序列化标识的字段

@@ -1,5 +1,5 @@
 /**
- * Copyright 2018-2118 the original author or authors.
+ * Copyright 2020-9999 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mykit.db.transfer.build;
+package io.mykit.db.oracle.build;
 
 import io.mykit.db.common.build.BaseBuilder;
 import io.mykit.db.common.constants.MykitDbSyncConstants;
+import io.mykit.db.common.entity.BaseDBInfo;
 import io.mykit.db.common.exception.MykitDbSyncException;
 import io.mykit.db.common.utils.StringUtils;
-import io.mykit.db.transfer.entity.DBInfo;
-import io.mykit.db.transfer.entity.JobInfo;
-import io.mykit.db.transfer.task.JobTask;
+import io.mykit.db.oracle.entity.DBInfo;
+import io.mykit.db.oracle.entity.JobInfo;
+import io.mykit.db.oracle.task.JobTask;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.quartz.CronTrigger;
@@ -43,15 +44,14 @@ import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * @author binghe
- * @description 同步数据库数据的Builder对象
  * @version 1.0.0
+ * @description 数据同步构建类
  */
 public class DBSyncBuilder extends BaseBuilder {
-
     private static Logger logger = LoggerFactory.getLogger(DBSyncBuilder.class);
 
     private DBInfo srcDb;
-    private DBInfo destDb;
+    private BaseDBInfo destDb;
     private List<JobInfo> jobList;
     private String code;
 
@@ -71,8 +71,6 @@ public class DBSyncBuilder extends BaseBuilder {
      * @return DBSyncBuilder对象
      */
     public DBSyncBuilder init(String configFile) {
-        srcDb = new DBInfo();
-        destDb = new DBInfo();
         jobList = new ArrayList<JobInfo>();
         SAXReader reader = new SAXReader();
         try {
@@ -91,9 +89,8 @@ public class DBSyncBuilder extends BaseBuilder {
                  Iterator it = jobs.elementIterator(MykitDbSyncConstants.NODE_JOB); it.hasNext();) {
                  jobList.add((JobInfo) elementInObject((Element) it.next(), new JobInfo()));
             }
-            //
-            elementInObject(src, srcDb);
-            elementInObject(dest, destDb);
+            srcDb = (DBInfo)elementInObject(src, new DBInfo());
+            destDb = (BaseDBInfo)elementInObject(dest, new BaseDBInfo());
             code = root.element(MykitDbSyncConstants.NODE_CODE).getTextTrim();
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,4 +126,5 @@ public class DBSyncBuilder extends BaseBuilder {
             }
         }
     }
+
 }

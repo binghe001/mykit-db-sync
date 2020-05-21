@@ -13,30 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mykit.db.oracle;
+package io.mykit.db.transfer.sync.impl;
 
-import io.mykit.db.common.exception.MykitDbSyncException;
-import io.mykit.db.common.utils.DateUtils;
-import io.mykit.db.oracle.build.DBSyncBuilder;
+import io.mykit.db.transfer.entity.JobInfo;
+import io.mykit.db.transfer.sync.DBSync;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * @author binghe
  * @version 1.0.0
- * @description 程序的启动入口类
+ * @description Oracle数据库同步实现
  */
-public class Main {
+public class OracleSync extends AbstractDBSync implements DBSync {
 
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private Logger logger = LoggerFactory.getLogger(OracleSync.class);
 
-    public static void main(String[] args){
-        if (args.length <= 0){
-            throw new MykitDbSyncException("必须指定配置文件的目录，例如：/home/db/sync/jobs.xml");
-        }
-        logger.info("同步数据开始===>>>" + DateUtils.parseDateToString(new Date(), DateUtils.DATE_TIME_FORMAT));
-        DBSyncBuilder.builder().init(args[0]).start();
+    @Override
+    public String assembleSQL(String paramString, Connection paramConnection, JobInfo paramJobInfo) throws SQLException {
+        //TODO 待实现
+        return null;
+    }
+
+    @Override
+    public void executeSQL(String sql, Connection conn) throws SQLException {
+        //TODO 待实现
     }
 }

@@ -17,6 +17,7 @@ package io.mykit.db.transfer.factory;
 
 import io.mykit.db.transfer.sync.DBSync;
 import io.mykit.db.transfer.sync.impl.MySQLSync;
+import io.mykit.db.transfer.sync.impl.OracleSync;
 import io.mykit.db.transfer.sync.impl.SQLServerSync;
 import io.mykit.db.common.utils.StringUtils;
 import io.mykit.db.common.constants.MykitDbSyncConstants;
@@ -40,6 +41,8 @@ public class DBSyncFactory {
                 return new MySQLSync();
             case MykitDbSyncConstants.TYPE_DB_SQLSERVER:
                 return new SQLServerSync();
+            case MykitDbSyncConstants.TYPE_DB_ORACLE:
+                return new OracleSync();
             default:
                 return null;
         }

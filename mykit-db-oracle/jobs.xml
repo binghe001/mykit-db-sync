@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <code>4500000001</code>
+    <source>
+        <url>jdbc:oracle:thin:@127.0.0.1:1521:practice</url>
+        <username>sync</username>
+        <password>sync</password>
+        <dbtype>oracle</dbtype>
+        <driver>oracle.jdbc.driver.OracleDriver</driver>
+        <lastScn>0</lastScn>
+        <clientUserName>LOGMINER</clientUserName>
+        <logPath>/home/log</logPath>
+        <dataDictionary>/home/dic</dataDictionary>
+    </source>
+    <dest>
+        <url>jdbc:oracle:thin:@127.0.0.1:1521:target</url>
+        <username>target</username>
+        <password>target</password>
+        <dbtype>oracle</dbtype>
+        <driver>oracle.jdbc.driver.OracleDriver</driver>
+    </dest>
+    <jobs>
+        <job>
+            <name>oracle</name>
+            <!--每隔30秒执行一次-->
+            <cron>0/30 * * * * ?</cron>
+        </job>
+    </jobs>
+</root>
