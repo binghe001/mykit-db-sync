@@ -18,7 +18,8 @@ package io.mykit.db.sync.sync.impl;
 import io.mykit.db.sync.entity.JobInfo;
 import io.mykit.db.sync.sync.DBSync;
 import io.mykit.db.sync.utils.Tool;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +33,7 @@ import java.sql.SQLException;
  * @version 1.0.0
  */
 public class MySQLSync extends AbstractDBSync implements DBSync {
-    private Logger logger = Logger.getLogger(MySQLSync.class);
+    private Logger logger = LoggerFactory.getLogger(MySQLSync.class);
 
     @Override
     public String assembleSQL(String srcSql, Connection conn, JobInfo jobInfo) throws SQLException {
@@ -45,13 +46,18 @@ public class MySQLSync extends AbstractDBSync implements DBSync {
         String destTableKey = jobInfo.getDestTableKey();
         PreparedStatement pst = conn.prepareStatement(srcSql);
         ResultSet rs = pst.executeQuery();
-        StringBuffer sql = new StringBuffer();
+        StringBuilder sql = new StringBuilder();
         sql.append("insert into ").append(jobInfo.getDestTable()).append(" (").append(jobInfo.getDestTableFields()).append(") values ");
         long count = 0;
         while (rs.next()) {
             sql.append("(");
             for (int index = 0; index < fields.length; index++) {
-                sql.append("'").append(rs.getString(fields[index])).append(index == (fields.length - 1) ? "'" : "',");
+                Object fieldValue = rs.getObject(fields[index]);
+                if (fieldValue == null){
+                    sql.append(fieldValue).append(index == (fields.length - 1) ? "" : ",");
+                }else{
+                    sql.append("'").append(fieldValue).append(index == (fields.length - 1) ? "'" : "',");
+                }
             }
             sql.append("),");
             count++;

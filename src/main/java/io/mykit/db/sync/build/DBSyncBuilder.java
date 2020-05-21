@@ -15,20 +15,10 @@
  */
 package io.mykit.db.sync.build;
 
-import io.mykit.db.sync.constants.Constants;
+import io.mykit.db.sync.constants.MykitDbSyncConstants;
 import io.mykit.db.sync.entity.DBInfo;
 import io.mykit.db.sync.entity.JobInfo;
 import io.mykit.db.sync.task.JobTask;
-import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.JobBuilder.newJob;
-import static org.quartz.TriggerBuilder.newTrigger;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import org.apache.log4j.Logger;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.quartz.CronTrigger;
@@ -36,6 +26,17 @@ import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import static org.quartz.CronScheduleBuilder.cronSchedule;
+import static org.quartz.JobBuilder.newJob;
+import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
  * @author liuyazhuang
@@ -49,7 +50,7 @@ public class DBSyncBuilder {
     private DBInfo destDb;
     private List<JobInfo> jobList;
     private String code;
-    private static Logger logger = Logger.getLogger(DBSyncBuilder.class);
+    private static Logger logger = LoggerFactory.getLogger(DBSyncBuilder.class);
 
     private DBSyncBuilder(){
     }
@@ -73,19 +74,19 @@ public class DBSyncBuilder {
         SAXReader reader = new SAXReader();
         try {
             // 读取xml的配置文件名，并获取其里面的节点
-            Element root = reader.read("jobs.xml").getRootElement();
-            Element src = root.element("source");
-            Element dest = root.element("dest");
-            Element jobs = root.element("jobs");
+            Element root = reader.read(MykitDbSyncConstants.JOB_CONFIG_FILE).getRootElement();
+            Element src = root.element(MykitDbSyncConstants.NODE_SOURCE);
+            Element dest = root.element(MykitDbSyncConstants.NODE_DEST);
+            Element jobs = root.element(MykitDbSyncConstants.NODE_JOBS);
             // 遍历job即同步的表
             for (@SuppressWarnings("rawtypes")
-                 Iterator it = jobs.elementIterator("job"); it.hasNext();) {
+                 Iterator it = jobs.elementIterator(MykitDbSyncConstants.NODE_JOB); it.hasNext();) {
                 jobList.add((JobInfo) elementInObject((Element) it.next(), new JobInfo()));
             }
             //
             elementInObject(src, srcDb);
             elementInObject(dest, destDb);
-            code = root.element("code").getTextTrim();
+            code = root.element(MykitDbSyncConstants.NODE_CODE).getTextTrim();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -105,7 +106,7 @@ public class DBSyncBuilder {
         for (int index = 0; index < fields.length; index++) {
             Field item = fields[index];
             //当前字段不是serialVersionUID，同时当前字段不包含serialVersionUID
-            if (!Constants.FIELD_SERIALVERSIONUID.equals(item.getName()) && !item.getName().contains(Constants.FIELD_SERIALVERSIONUID)){
+            if (!MykitDbSyncConstants.FIELD_SERIALVERSIONUID.equals(item.getName()) && !item.getName().contains(MykitDbSyncConstants.FIELD_SERIALVERSIONUID)){
                 item.setAccessible(true);
                 item.set(o, e.element(item.getName()).getTextTrim());
             }
@@ -123,13 +124,13 @@ public class DBSyncBuilder {
             try {
                 SchedulerFactory sf = new StdSchedulerFactory();
                 Scheduler sched = sf.getScheduler();
-                JobDetail job = newJob(JobTask.class).withIdentity("job-" + jobInfo.getName(), code).build();
-                job.getJobDataMap().put("srcDb", srcDb);
-                job.getJobDataMap().put("destDb", destDb);
-                job.getJobDataMap().put("jobInfo", jobInfo);
-                job.getJobDataMap().put("logTitle", logTitle);
+                JobDetail job = newJob(JobTask.class).withIdentity(MykitDbSyncConstants.JOB_PREFIX.concat(jobInfo.getName()), code).build();
+                job.getJobDataMap().put(MykitDbSyncConstants.SRC_DB, srcDb);
+                job.getJobDataMap().put(MykitDbSyncConstants.DEST_DB, destDb);
+                job.getJobDataMap().put(MykitDbSyncConstants.JOB_INFO, jobInfo);
+                job.getJobDataMap().put(MykitDbSyncConstants.LOG_TITLE, logTitle);
                 logger.info(jobInfo.getCron());
-                CronTrigger trigger = newTrigger().withIdentity("trigger-" + jobInfo.getName(), code).withSchedule(cronSchedule(jobInfo.getCron())).build();
+                CronTrigger trigger = newTrigger().withIdentity(MykitDbSyncConstants.TRIGGER_PREFIX.concat(jobInfo.getName()), code).withSchedule(cronSchedule(jobInfo.getCron())).build();
                 sched.scheduleJob(job, trigger);
                 sched.start();
             } catch (Exception e) {

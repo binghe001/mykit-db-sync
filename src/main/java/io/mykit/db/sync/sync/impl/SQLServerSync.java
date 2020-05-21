@@ -17,7 +17,8 @@ package io.mykit.db.sync.sync.impl;
 
 import io.mykit.db.sync.entity.JobInfo;
 import io.mykit.db.sync.sync.DBSync;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
@@ -28,7 +29,7 @@ import java.sql.*;
  * @version 1.0.0
  */
 public class SQLServerSync extends AbstractDBSync implements DBSync {
-    private Logger logger = Logger.getLogger(SQLServerSync.class);
+    private Logger logger = LoggerFactory.getLogger(SQLServerSync.class);
 
     @Override
     public String assembleSQL(String srcSql, Connection conn, JobInfo jobInfo) throws SQLException {

@@ -15,15 +15,19 @@
  */
 package io.mykit.db.sync.task;
 
+import io.mykit.db.sync.constants.MykitDbSyncConstants;
 import io.mykit.db.sync.entity.DBInfo;
 import io.mykit.db.sync.entity.JobInfo;
+import io.mykit.db.sync.exception.MykitDbSyncException;
 import io.mykit.db.sync.factory.DBSyncFactory;
 import io.mykit.db.sync.sync.DBSync;
-import org.apache.log4j.Logger;
+import io.mykit.db.sync.utils.DateUtils;
 import org.quartz.Job;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -37,7 +41,7 @@ import java.util.Date;
  * @version 1.0.0
  */
 public class JobTask implements Job {
-    private Logger logger = Logger.getLogger(JobTask.class);
+    private final Logger logger = LoggerFactory.getLogger(JobTask.class);
 
     /**
      * 执行同步数据库任务
@@ -45,42 +49,43 @@ public class JobTask implements Job {
      */
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        this.logger.info("开始任务调度: " + new Date());
+        this.logger.info("开始任务调度: {}", DateUtils.parseDateToString(new Date(), DateUtils.DATE_TIME_FORMAT));
         Connection inConn = null;
         Connection outConn = null;
         JobDataMap data = context.getJobDetail().getJobDataMap();
-        DBInfo srcDb = (DBInfo) data.get("srcDb");
-        DBInfo destDb = (DBInfo) data.get("destDb");
-        JobInfo jobInfo = (JobInfo) data.get("jobInfo");
-        String logTitle = (String) data.get("logTitle");
+        DBInfo srcDb = (DBInfo) data.get(MykitDbSyncConstants.SRC_DB);
+        DBInfo destDb = (DBInfo) data.get(MykitDbSyncConstants.DEST_DB);
+        JobInfo jobInfo = (JobInfo) data.get(MykitDbSyncConstants.JOB_INFO);
+        String logTitle = (String) data.get(MykitDbSyncConstants.LOG_TITLE);
         try {
             inConn = createConnection(srcDb);
             outConn = createConnection(destDb);
             if (inConn == null) {
-                this.logger.info("请检查源数据连接!");
-                return;
+                this.logger.error("请检查源数据连接!");
+                throw new MykitDbSyncException("请检查源数据连接!");
             } else if (outConn == null) {
-                this.logger.info("请检查目标数据连接!");
-                return;
+                this.logger.error("请检查目标数据连接!");
+                throw new MykitDbSyncException("请检查目标数据连接!");
             }
 
             DBSync dbHelper = DBSyncFactory.create(destDb.getDbtype());
-            long start = new Date().getTime();
+            long start = System.currentTimeMillis();
             String sql = dbHelper.assembleSQL(jobInfo.getSrcSql(), inConn, jobInfo);
-            this.logger.info("组装SQL耗时: " + (new Date().getTime() - start) + "ms");
+            this.logger.info("组装SQL耗时: " + (System.currentTimeMillis() - start) + "ms");
             if (sql != null) {
                 this.logger.debug(sql);
-                long eStart = new Date().getTime();
+                long eStart = System.currentTimeMillis();
                 dbHelper.executeSQL(sql, outConn);
-                this.logger.info("执行SQL语句耗时: " + (new Date().getTime() - eStart) + "ms");
+                this.logger.info("执行SQL语句耗时: " + (System.currentTimeMillis() - eStart) + "ms");
             }
         } catch (SQLException e) {
             this.logger.error(logTitle + e.getMessage());
             this.logger.error(logTitle + " SQL执行出错，请检查是否存在语法错误");
+            throw new MykitDbSyncException(logTitle + e.getMessage());
         } finally {
-            this.logger.error("关闭源数据库连接");
+            this.logger.info("关闭源数据库连接");
             destoryConnection(inConn);
-            this.logger.error("关闭目标数据库连接");
+            this.logger.info("关闭目标数据库连接");
             destoryConnection(outConn);
         }
     }

@@ -17,7 +17,8 @@ package io.mykit.db.sync;
 
 import io.mykit.db.sync.build.DBSyncBuilder;
 import io.mykit.db.sync.utils.DateUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
 
@@ -29,7 +30,7 @@ import java.util.Date;
  */
 public class Main {
 
-    private static Logger logger = Logger.getLogger(DBSyncBuilder.class);
+    private static Logger logger = LoggerFactory.getLogger(DBSyncBuilder.class);
 
     public static void main(String[] args) {
         logger.info("同步数据开始===>>>" + DateUtils.parseDateToString(new Date(), DateUtils.DATE_TIME_FORMAT));

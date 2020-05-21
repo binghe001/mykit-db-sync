@@ -15,7 +15,7 @@
  */
 package io.mykit.db.sync.factory;
 
-import io.mykit.db.sync.constants.Constants;
+import io.mykit.db.sync.constants.MykitDbSyncConstants;
 import io.mykit.db.sync.sync.DBSync;
 import io.mykit.db.sync.sync.impl.MySQLSync;
 import io.mykit.db.sync.sync.impl.SQLServerSync;
@@ -37,9 +37,9 @@ public class DBSyncFactory {
     public static DBSync create(String type){
         if(StringUtils.isEmpty(type)) return null;
         switch (type) {
-            case Constants.TYPE_DB_MYSQL:
+            case MykitDbSyncConstants.TYPE_DB_MYSQL:
                 return new MySQLSync();
-            case Constants.TYPE_DB_SQLSERVER:
+            case MykitDbSyncConstants.TYPE_DB_SQLSERVER:
                 return new SQLServerSync();
             default:
                 return null;
