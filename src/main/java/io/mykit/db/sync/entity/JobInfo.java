@@ -18,7 +18,7 @@ package io.mykit.db.sync.entity;
 import java.io.Serializable;
 
 /**
- * @author liuyazhuang
+ * @author binghe
  * @date 2018/9/11 10:13
  * @description 任务信息
  * @version 1.0.0
