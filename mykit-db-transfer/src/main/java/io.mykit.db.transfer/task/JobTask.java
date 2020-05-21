@@ -115,7 +115,7 @@ public class JobTask implements Job {
             if (conn != null) {
                 conn.close();
                 conn = null;
-                this.logger.error("数据库连接关闭");
+                this.logger.info("数据库连接关闭");
             }
         } catch (SQLException e) {
             e.printStackTrace();

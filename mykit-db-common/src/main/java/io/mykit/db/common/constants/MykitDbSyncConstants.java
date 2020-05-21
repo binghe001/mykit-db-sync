@@ -15,8 +15,6 @@
  */
 package io.mykit.db.common.constants;
 
-import java.io.File;
-
 /**
  * @author binghe
  * @description 常量类

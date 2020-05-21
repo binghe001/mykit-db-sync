@@ -110,14 +110,18 @@ public class DBSyncBuilder {
      * @throws IllegalAccessException
      */
     public Object elementInObject(Element e, Object o) throws IllegalArgumentException, IllegalAccessException {
-        Field[] fields = o.getClass().getDeclaredFields();
-        for (int index = 0; index < fields.length; index++) {
-            Field item = fields[index];
-            //当前字段不是serialVersionUID，同时当前字段不包含serialVersionUID
-            if (!MykitDbSyncConstants.FIELD_SERIALVERSIONUID.equals(item.getName()) && !item.getName().contains(MykitDbSyncConstants.FIELD_SERIALVERSIONUID)){
-                item.setAccessible(true);
-                item.set(o, e.element(item.getName()).getTextTrim());
+        Class<?> clazz = o.getClass();
+        while (clazz != null){
+            Field[] fields = clazz.getDeclaredFields();
+            for (int index = 0; index < fields.length; index++) {
+                Field item = fields[index];
+                //当前字段不是serialVersionUID，同时当前字段不包含serialVersionUID
+                if (!MykitDbSyncConstants.FIELD_SERIALVERSIONUID.equals(item.getName()) && !item.getName().contains(MykitDbSyncConstants.FIELD_SERIALVERSIONUID)){
+                    item.setAccessible(true);
+                    item.set(o, e.element(item.getName()).getTextTrim());
+                }
             }
+            clazz = clazz.getSuperclass();
         }
         return o;
     }
@@ -142,8 +146,9 @@ public class DBSyncBuilder {
                 sched.scheduleJob(job, trigger);
                 sched.start();
             } catch (Exception e) {
-                logger.info(logTitle + e.getMessage());
-                logger.info(logTitle + " run failed");
+                e.printStackTrace();
+                logger.error(logTitle + e.getMessage());
+                logger.error(logTitle + " run failed");
                 continue;
             }
         }

@@ -11,7 +11,16 @@
 
     <artifactId>mykit-db-oracle</artifactId>
 
+    <properties>
+        <oracle.jdbc.version>12.1.0</oracle.jdbc.version>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>${oracle.jdbc.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.mykit.db.sync</groupId>
             <artifactId>mykit-db-common</artifactId>

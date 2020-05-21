@@ -1,5 +1,5 @@
 /**
- * Copyright 2018-2118 the original author or authors.
+ * Copyright 2020-9999 the original author or authors.
  * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.mykit.db.transfer.entity;
+package io.mykit.db.common.entity;
 
-import io.mykit.db.common.entity.BaseDBInfo;
+import java.io.Serializable;
 
 /**
  * @author binghe
- * @description 数据库信息
  * @version 1.0.0
+ * @description 基础的任务信息
  */
+public class BaseJobInfo implements Serializable {
+    private static final long serialVersionUID = 8512765449801275225L;
+    //任务名称
+    private String name;
+    //任务表达式
+    private String cron;
 
-public class DBInfo extends BaseDBInfo {
-    private static final long serialVersionUID = 3095305945250814263L;
-    //数据库类型(对应mysql还是sqlserver)
-    private String dbtype;
-
-    public String getDbtype() {
-        return dbtype;
+    public String getName() {
+        return name;
     }
 
-    public void setDbtype(String dbtype) {
-        this.dbtype = dbtype;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCron() {
+        return cron;
+    }
+
+    public void setCron(String cron) {
+        this.cron = cron;
     }
 }
