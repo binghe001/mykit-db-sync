@@ -2,14 +2,14 @@
 <root>
     <code>4500000001</code>
     <source>
-        <url>jdbc:mysql://10.2.2.231:3306/guanxing_medical</url>
+        <url>jdbc:mysql://10.2.2.231:3306/test</url>
         <username>root</username>
         <password>root</password>
         <dbtype>mysql</dbtype>
         <driver>com.mysql.jdbc.Driver</driver>
     </source>
     <dest>
-        <url>jdbc:mysql://127.0.0.1:3306/guanxing_medical</url>
+        <url>jdbc:mysql://127.0.0.1:3306/test</url>
         <username>root</username>
         <password>root</password>
         <dbtype>mysql</dbtype>
