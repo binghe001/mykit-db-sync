@@ -9,8 +9,8 @@
         <driver>oracle.jdbc.driver.OracleDriver</driver>
         <lastScn>0</lastScn>
         <clientUserName>LOGMINER</clientUserName>
-        <logPath>/home/log</logPath>
-        <dataDictionary>/home/dic</dataDictionary>
+        <logPath>/home/oracle/logs/practice</logPath>
+        <dataDictionary>/home/oracle/logs/logmnr</dataDictionary>
     </source>
     <dest>
         <url>jdbc:oracle:thin:@127.0.0.1:1521:target</url>
