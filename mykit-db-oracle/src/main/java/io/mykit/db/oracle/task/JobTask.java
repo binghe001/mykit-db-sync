@@ -17,6 +17,7 @@ package io.mykit.db.oracle.task;
 
 import io.mykit.db.common.constants.MykitDbSyncConstants;
 import io.mykit.db.common.db.DbConnection;
+import io.mykit.db.common.entity.BaseDBInfo;
 import io.mykit.db.common.exception.MykitDbSyncException;
 import io.mykit.db.common.utils.DateUtils;
 import io.mykit.db.oracle.entity.DBInfo;
@@ -47,7 +48,7 @@ public class JobTask extends DbConnection implements Job {
         Connection targetConn = null;
         JobDataMap data = context.getJobDetail().getJobDataMap();
         DBInfo srcDb = (DBInfo) data.get(MykitDbSyncConstants.SRC_DB);
-        DBInfo destDb = (DBInfo) data.get(MykitDbSyncConstants.DEST_DB);
+        BaseDBInfo destDb = (BaseDBInfo) data.get(MykitDbSyncConstants.DEST_DB);
         JobInfo jobInfo = (JobInfo) data.get(MykitDbSyncConstants.JOB_INFO);
         String logTitle = (String) data.get(MykitDbSyncConstants.LOG_TITLE);
         ResultSet resultSet = null;
@@ -66,9 +67,9 @@ public class JobTask extends DbConnection implements Job {
             // 添加所有日志文件，本代码仅分析联机日志
             StringBuffer sbSQL = new StringBuffer();
             sbSQL.append(" BEGIN");
-            sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "REDO01.LOG', options=>dbms_logmnr.NEW);");
-            sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "REDO02.LOG', options=>dbms_logmnr.ADDFILE);");
-            sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "REDO03.LOG', options=>dbms_logmnr.ADDFILE);");
+            sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "redo01.log', options=>dbms_logmnr.NEW);");
+            sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "redo02.log', options=>dbms_logmnr.ADDFILE);");
+            sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "redo03.log', options=>dbms_logmnr.ADDFILE);");
             sbSQL.append(" END;");
             CallableStatement callableStatement = sourceConn.prepareCall(sbSQL+"");
             callableStatement.execute();
@@ -79,7 +80,7 @@ public class JobTask extends DbConnection implements Job {
                 logger.debug("已添加日志文件==>{}", resultSet.getObject(3));
             }
             logger.debug("开始分析日志文件,起始scn号：{}", srcDb.getLastScn());
-            callableStatement = sourceConn.prepareCall("BEGIN dbms_logmnr.start_logmnr(startScn=>'" + srcDb.getLastScn()+ "',dictfilename=>'" + srcDb.getDataDictionary() + "\\dictionary.ora',OPTIONS =>DBMS_LOGMNR.COMMITTED_DATA_ONLY+dbms_logmnr.NO_ROWID_IN_STMT);END;");
+            callableStatement = sourceConn.prepareCall("BEGIN dbms_logmnr.start_logmnr(startScn=>'" + srcDb.getLastScn()+ "',dictfilename=>'" + srcDb.getDataDictionary() + File.separator +"dictionary.ora',OPTIONS =>DBMS_LOGMNR.COMMITTED_DATA_ONLY+dbms_logmnr.NO_ROWID_IN_STMT);END;");
             callableStatement.execute();
             logger.debug("完成分析日志文件");
 
@@ -112,6 +113,7 @@ public class JobTask extends DbConnection implements Job {
                     continue;
                 }
                 operation = String.valueOf(opera);
+                logger.debug("operation={}", operation);
                 if( "DDL".equalsIgnoreCase(operation) ){
                     isCreateDictionary = true;
                 }
@@ -136,7 +138,7 @@ public class JobTask extends DbConnection implements Job {
                 //更新scn
                 srcDb.setLastScn(lastScn);
                 // DDL发生变化，更新数据字典
-                if( isCreateDictionary ){
+                if(isCreateDictionary ){
                     logger.debug("DDL发生变化，更新数据字典");
                     //创建数据字典
                     this.createDictionary(sourceConn, srcDb.getDataDictionary());
@@ -150,7 +152,10 @@ public class JobTask extends DbConnection implements Job {
             this.logger.error(logTitle + e.getMessage());
             this.logger.error(logTitle + " SQL执行出错，请检查是否存在语法错误");
             throw new MykitDbSyncException(logTitle + e.getMessage());
-        }finally {
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        finally {
             this.logger.info("关闭源数据库连接");
             destoryConnection(sourceConn);
             this.logger.info("关闭目标数据库连接");

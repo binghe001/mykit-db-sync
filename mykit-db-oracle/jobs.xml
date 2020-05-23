@@ -2,20 +2,20 @@
 <root>
     <code>4500000001</code>
     <source>
-        <url>jdbc:oracle:thin:@127.0.0.1:1521:practice</url>
-        <username>sync</username>
-        <password>sync</password>
+        <url>jdbc:oracle:thin:@192.168.175.121:1521:orcl</url>
+        <username>SYNC</username>
+        <password>SYNC</password>
         <dbtype>oracle</dbtype>
         <driver>oracle.jdbc.driver.OracleDriver</driver>
         <lastScn>0</lastScn>
-        <clientUserName>LOGMINER</clientUserName>
-        <logPath>/home/oracle/logs/practice</logPath>
-        <dataDictionary>/home/oracle/logs/logmnr</dataDictionary>
+        <clientUserName>SYNC</clientUserName>
+        <logPath>/home/oracle/tools/oracle11g/oradata/orcl</logPath>
+        <dataDictionary>/home/oracle/tools/oracle11g/oradata/orcl/LOGMNR</dataDictionary>
     </source>
     <dest>
-        <url>jdbc:oracle:thin:@127.0.0.1:1521:target</url>
-        <username>target</username>
-        <password>target</password>
+        <url>jdbc:oracle:thin:@192.168.175.122:1521:orcl</url>
+        <username>SYNC</username>
+        <password>SYNC</password>
         <dbtype>oracle</dbtype>
         <driver>oracle.jdbc.driver.OracleDriver</driver>
     </dest>
