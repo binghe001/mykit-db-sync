@@ -23,7 +23,7 @@
         <slf4j.version>1.7.21</slf4j.version>
         <common.logging>1.2</common.logging>
         <junit.version>4.12</junit.version>
-        <quartz.version>2.1.3</quartz.version>
+        <quartz.version>2.3.2</quartz.version>
         <dom4j.version>1.6.1</dom4j.version>
     </properties>
 
