@@ -40,4 +40,4 @@ MySQL与SQL Server数据互传模块，使用此模块可以实现MySQL和SQL Se
 **你在刷抖音，玩游戏的时候，别人都在这里学习，成长，提升，人与人最大的差距其实就是思维。你可能不信，优秀的人，总是在一起。** 
   
 扫一扫关注冰河技术微信公众号  
-![微信公众号](https://github.com/sunshinelyz/binghe_resources/blob/master/images/subscribe/qrcode_for_gh_0d4482676600_344.jpg)  
+![微信公众号](https://img-blog.csdnimg.cn/20200716220443647.png)  
