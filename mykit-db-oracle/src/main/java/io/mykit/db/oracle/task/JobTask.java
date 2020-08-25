@@ -53,8 +53,8 @@ public class JobTask extends DbConnection implements Job {
         String logTitle = (String) data.get(MykitDbSyncConstants.LOG_TITLE);
         ResultSet resultSet = null;
         try{
-            sourceConn = createConnection(srcDb);
-            targetConn = createConnection(destDb);
+            sourceConn = getConnection(MykitDbSyncConstants.TYPE_SOURCE, srcDb);
+            targetConn = getConnection(MykitDbSyncConstants.TYPE_DEST, destDb);
             if (sourceConn == null) {
                 this.logger.error("请检查源数据连接!");
                 throw new MykitDbSyncException("请检查源数据连接!");

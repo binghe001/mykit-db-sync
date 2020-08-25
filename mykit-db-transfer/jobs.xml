@@ -2,14 +2,14 @@
 <root>
     <code>4500000001</code>
     <source>
-        <url>jdbc:mysql://localhost:3306/test</url>
+        <url>jdbc:mysql://localhost:3306/test_dev?useUnicode=true&amp;characterEncoding=UTF-8&amp;useOldAliasMetadataBehavior=true</url>
         <username>root</username>
         <password>root</password>
         <dbtype>mysql</dbtype>
         <driver>com.mysql.jdbc.Driver</driver>
     </source>
     <dest>
-        <url>jdbc:mysql://192.168.0.10:3306/test</url>
+        <url>jdbc:mysql://localhost:3306/test_prod?useUnicode=true&amp;characterEncoding=UTF-8&amp;useOldAliasMetadataBehavior=true</url>
         <username>root</username>
         <password>root</password>
         <dbtype>mysql</dbtype>
@@ -19,7 +19,7 @@
         <job>
             <name>1</name>
             <!--每隔30秒执行一次-->
-            <cron>0/30 * * * * ?</cron>
+            <cron>0/5 * * * * ?</cron>
             <srcSql>select id, username, age, t_create_time from t_user</srcSql>
             <destTable>t_user</destTable>
             <destTableFields>id, username, age, t_create_time</destTableFields>

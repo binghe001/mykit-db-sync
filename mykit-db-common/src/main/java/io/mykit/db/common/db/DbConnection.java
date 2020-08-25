@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
@@ -34,14 +33,13 @@ public class DbConnection {
     /**
      * 创建数据库连接
      */
-    protected Connection createConnection(BaseDBInfo db) {
+    protected Connection getConnection(String dbType, BaseDBInfo db) {
         try {
-            Class.forName(db.getDriver());
-            Connection conn = DriverManager.getConnection(db.getUrl(), db.getUsername(), db.getPassword());
-            conn.setAutoCommit(false);
-            return conn;
-        } catch (Exception e) {
-            this.logger.error(e.getMessage());
+            Connection connection = DataSourceFactory.getDruidDataSource(dbType, db).getConnection();
+            connection.setAutoCommit(false);
+            return connection;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return null;
     }

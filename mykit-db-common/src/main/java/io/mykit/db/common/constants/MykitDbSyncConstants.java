@@ -23,6 +23,16 @@ package io.mykit.db.common.constants;
 public class MykitDbSyncConstants {
 
     /**
+     * 源数据库
+     */
+    public static final String TYPE_SOURCE = "source";
+
+    /**
+     * 目标数据库
+     */
+    public static final String TYPE_DEST = "dest";
+
+    /**
      * sqlserver数据库
      */
     public static final String TYPE_DB_SQLSERVER = "sqlserver";
