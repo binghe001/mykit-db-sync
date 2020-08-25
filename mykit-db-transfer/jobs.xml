@@ -19,7 +19,7 @@
         <job>
             <name>1</name>
             <!--每隔30秒执行一次-->
-            <cron>0/5 * * * * ?</cron>
+            <cron>0/30 * * * * ?</cron>
             <srcSql>select id, username, age, t_create_time from t_user</srcSql>
             <destTable>t_user</destTable>
             <destTableFields>id, username, age, t_create_time</destTableFields>
