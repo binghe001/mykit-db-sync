@@ -14,6 +14,7 @@
     <properties>
         <jdbc.version>5.1.22</jdbc.version>
         <mssql.version>6.2.0.jre8</mssql.version>
+        <oracle.jdbc.version>12.1.0</oracle.jdbc.version>
     </properties>
 
     <dependencies>
@@ -27,6 +28,12 @@
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
             <version>${mssql.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>${oracle.jdbc.version}</version>
         </dependency>
 
         <dependency>

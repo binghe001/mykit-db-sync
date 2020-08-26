@@ -33,7 +33,7 @@ public class BaseDBInfo implements Serializable {
     private String password;
     //数据库驱动
     private String driver;
-    //数据库类型(对应mysql还是sqlserver)
+    //数据库类型(对应mysql还是sqlserver,还是oracle)
     private String dbtype;
 
     public String getUrl() {

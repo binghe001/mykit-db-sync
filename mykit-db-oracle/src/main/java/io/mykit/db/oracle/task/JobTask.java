@@ -65,13 +65,13 @@ public class JobTask extends DbConnection implements Job {
             //联机处理分析数据
             Statement statement = sourceConn.createStatement();
             // 添加所有日志文件，本代码仅分析联机日志
-            StringBuffer sbSQL = new StringBuffer();
+            StringBuilder sbSQL = new StringBuilder();
             sbSQL.append(" BEGIN");
             sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "redo01.log', options=>dbms_logmnr.NEW);");
             sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "redo02.log', options=>dbms_logmnr.ADDFILE);");
             sbSQL.append(" dbms_logmnr.add_logfile(logfilename=>'" + srcDb.getLogPath() + File.separator + "redo03.log', options=>dbms_logmnr.ADDFILE);");
             sbSQL.append(" END;");
-            CallableStatement callableStatement = sourceConn.prepareCall(sbSQL+"");
+            CallableStatement callableStatement = sourceConn.prepareCall(sbSQL.toString());
             callableStatement.execute();
 
             // 打印分析日志文件信息
@@ -156,9 +156,9 @@ public class JobTask extends DbConnection implements Job {
             e.printStackTrace();
         }
         finally {
-            this.logger.info("关闭源数据库连接");
+            this.logger.debug("关闭源数据库连接");
             destoryConnection(sourceConn);
-            this.logger.info("关闭目标数据库连接");
+            this.logger.debug("关闭目标数据库连接");
             destoryConnection(targetConn);
         }
     }

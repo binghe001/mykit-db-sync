@@ -1,6 +1,7 @@
 # 作者及联系方式
 作者：冰河  
 QQ：2711098650  
+微信：sun_shine_lyz  
 微信公众号： 冰河技术
 
 # mykit-db-transfer
@@ -25,6 +26,7 @@ mykit中分离出的强大数据数据库同步工具——mykit-db-sync中的�
 - MySQL——>SQL Server  
 - SQL Server——>SQL Server  
 - SQL Server——>MySQL  
+- Oracle——>MySQL
 
 # 编译和运行
 
@@ -105,9 +107,44 @@ jobs.xml
     </jobs>
 </root>
 ```
+
+### Oracle——>MySQL
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <code>4500000001</code>
+    <source>
+        <url>jdbc:oracle:thin:@192.168.175.100:1521:binghe</url>
+        <username>BINGHE</username>
+        <password>BINGHE123</password>
+        <dbtype>oracle</dbtype>
+        <driver>oracle.jdbc.driver.OracleDriver</driver>
+    </source>
+    <dest>
+        <url>jdbc:mysql://localhost:3306/test_prod?useUnicode=true&amp;characterEncoding=UTF-8&amp;useOldAliasMetadataBehavior=true</url>
+        <username>root</username>
+        <password>root</password>
+        <dbtype>mysql</dbtype>
+        <driver>com.mysql.jdbc.Driver</driver>
+    </dest>
+    <jobs>
+        <job>
+            <name>1</name>
+            <!--每隔30秒执行一次-->
+            <cron>0/30 * * * * ?</cron>
+            <srcSql>select id, username, age, t_create_time from A_TEST</srcSql>
+            <destTable>t_user</destTable>
+            <destTableFields>id, username, age, t_create_time</destTableFields>
+            <destTableKey>id</destTableKey>
+            <destTableUpdate>username, age, t_create_time</destTableUpdate>
+        </job>
+    </jobs>
+</root>
+```
+
 # 扫一扫关注微信公众号
 
 **你在刷抖音，玩游戏的时候，别人都在这里学习，成长，提升，人与人最大的差距其实就是思维。你可能不信，优秀的人，总是在一起。** 
   
 扫一扫关注冰河技术微信公众号  
-![微信公众号](https://github.com/sunshinelyz/binghe_resources/blob/master/images/subscribe/qrcode_for_gh_0d4482676600_344.jpg)  
+![微信公众号](https://img-blog.csdnimg.cn/20200716220443647.png)   
