@@ -30,10 +30,10 @@ MySQL与SQL Server数据互传模块，使用此模块可以实现MySQL和SQL Se
 提供通用的工具类
 
 ## mykit-db-transfer
-详见：[《mykit-db-transfer功能说明》](https://github.com/sunshinelyz/mykit-db-sync/blob/master/mykit-db-transfer/README.md)
+详见：[《mykit-db-transfer功能说明》](mykit-db-transfer/README.md)
 
 ## mykit-db-oracle
-详见：[《mykit-db-oracle功能说明》](https://github.com/sunshinelyz/mykit-db-sync/blob/master/mykit-db-oracle/README.md)
+详见：[《mykit-db-oracle功能说明》](mykit-db-oracle/README.md)
 
 # 扫一扫关注微信公众号
 
