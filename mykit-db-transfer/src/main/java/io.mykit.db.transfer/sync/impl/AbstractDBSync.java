@@ -16,7 +16,12 @@
 package io.mykit.db.transfer.sync.impl;
 
 
+import io.mykit.db.common.constants.MykitDbSyncConstants;
+import io.mykit.db.common.exception.MykitDbSyncException;
 import io.mykit.db.transfer.sync.DBSync;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author binghe
@@ -36,5 +41,19 @@ public abstract class AbstractDBSync implements DBSync {
             dest[i] = src[i].trim();
         }
         return dest;
+    }
+
+    /**
+     * 构建字段的映射关系
+     */
+    protected Map<String, String> getFieldsMapper(String[] srcFields, String[] destFields){
+        if (srcFields.length != destFields.length){
+            throw new MykitDbSyncException("源数据库与目标数据库的字段必须一一对应");
+        }
+        Map<String, String> map = new HashMap<>();
+        for (int i = 0; i < srcFields.length; i++){
+            map.put(destFields[i].trim(), srcFields[i].trim());
+        }
+        return map;
     }
 }

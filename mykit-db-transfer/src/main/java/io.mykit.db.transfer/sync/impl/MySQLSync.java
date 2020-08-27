@@ -27,6 +27,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 /**
  * @author binghe
@@ -47,6 +48,7 @@ public class MySQLSync extends AbstractDBSync implements DBSync {
         if(!StringUtils.isEmpty(srcField)){
             srcFields = this.trimArrayItem(srcField.split(MykitDbSyncConstants.FIELD_SPLIT));
         }
+        Map<String, String> fieldMapper = this.getFieldsMapper(srcFields, destFields);
         String[] updateFields = jobInfo.getDestTableUpdate().split(MykitDbSyncConstants.FIELD_SPLIT);
         updateFields = this.trimArrayItem(updateFields);
         String destTable = jobInfo.getDestTable();
@@ -54,12 +56,12 @@ public class MySQLSync extends AbstractDBSync implements DBSync {
         PreparedStatement pst = conn.prepareStatement(srcSql);
         ResultSet rs = pst.executeQuery();
         StringBuilder sql = new StringBuilder();
-        sql.append("insert into ").append(jobInfo.getDestTable()).append(" (").append(jobInfo.getDestTableFields()).append(") values ");
+        sql.append("insert into ").append(destTable).append(" (").append(jobInfo.getDestTableFields()).append(") values ");
         long count = 0;
         while (rs.next()) {
             sql.append("(");
             for (int index = 0; index < destFields.length; index++) {
-                Object fieldValue = rs.getObject(srcFields[index]);
+                Object fieldValue = rs.getObject(fieldMapper.get(destFields[index].trim()));
                 if (fieldValue == null){
                     sql.append(fieldValue).append(index == (destFields.length - 1) ? "" : ",");
                 }else{

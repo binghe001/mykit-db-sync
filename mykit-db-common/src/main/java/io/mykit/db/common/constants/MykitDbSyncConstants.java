@@ -23,6 +23,21 @@ package io.mykit.db.common.constants;
 public class MykitDbSyncConstants {
 
     /**
+     * Oracle数据库时间格式
+     */
+    public static final String ORACLE_DATE_FORMAT = "yyyy-mm-dd hh24:mi:ss";
+
+    /**
+     * 日期分割符
+     */
+    public static final String DATE_SPLIT = "-";
+
+    /**
+     * 时间分割符
+     */
+    public static final String TIME_SPLIT = ":";
+
+    /**
      * 配置的字段分隔符
      */
     public static final String FIELD_SPLIT = ",";

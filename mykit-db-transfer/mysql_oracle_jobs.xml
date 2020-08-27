@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <code>4500000001</code>
+    <source>
+        <url>jdbc:mysql://localhost:3306/test_prod?useUnicode=true&amp;characterEncoding=UTF-8&amp;useOldAliasMetadataBehavior=true</url>
+        <username>root</username>
+        <password>root</password>
+        <dbtype>mysql</dbtype>
+        <driver>com.mysql.jdbc.Driver</driver>
+    </source>
+    <dest>
+        <url>jdbc:oracle:thin:@192.168.175.100:1521:binghe</url>
+        <username>BINGHE</username>
+        <password>BINGHE123</password>
+        <dbtype>oracle</dbtype>
+        <driver>oracle.jdbc.driver.OracleDriver</driver>
+    </dest>
+    <jobs>
+        <job>
+            <name>1</name>
+            <!--每隔30秒执行一次-->
+            <cron>0/5 * * * * ?</cron>
+            <srcSql>select id, username, age, DATE_FORMAT(t_create_time,'%Y-%m-%d %T') as t_create_time from t_user</srcSql>
+            <srcTableFields>id, username, age, t_create_time</srcTableFields>
+            <destTable>A_TEST</destTable>
+            <destTableFields>id, username, age, t_create_time</destTableFields>
+            <destTableKey>id</destTableKey>
+            <destTableUpdate>username, age, t_create_time</destTableUpdate>
+        </job>
+    </jobs>
+</root>

@@ -15,7 +15,7 @@ mykit中分离出的强大数据数据库同步工具——mykit-db-sync中的�
 针对以上存在的问题，将珍贵人力从这种重复、无意义的工作中解脱出来，特意开发这个小工具，其中主要配置主要在jobs.xml中完成
 
 # 主要功能
-- 目标数据库目前只支持MySQL和SQL Sever，Oracle，源数据库为任何支持sql语法的数据库
+- 目标数据库目前只支持MySQL、SQL Sever和Oracle，源数据库为任何支持sql语法的数据库
 - 根据cron表达式配置数据同步的周期和时间
 - 执行多个数据同步任务
 - 源数据是根据配置的sql语句查询得到，使用者可以非常灵活根据需要进行修改
@@ -25,9 +25,13 @@ mykit中分离出的强大数据数据库同步工具——mykit-db-sync中的�
 # 目前支持的数据库同步方式：
 - MySQL——>MySQL  
 - MySQL——>SQL Server  
+- MySQL——>Oracle  
 - SQL Server——>SQL Server  
 - SQL Server——>MySQL  
-- Oracle——>MySQL
+- SQL Server——>Oracle  
+- Oracle——>MySQL  
+- Oracle——>Oracle  
+- Oracle——>SQL Server
 
 # 编译和运行
 
@@ -139,6 +143,40 @@ jobs.xml
             <srcSql>select id, username, age, t_create_time from A_TEST</srcSql>
             <srcTableFields>id, username, age, t_create_time</srcTableFields>
             <destTable>t_user</destTable>
+            <destTableFields>id, username, age, t_create_time</destTableFields>
+            <destTableKey>id</destTableKey>
+            <destTableUpdate>username, age, t_create_time</destTableUpdate>
+        </job>
+    </jobs>
+</root>
+```
+### MySQL——>Oracle
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <code>4500000001</code>
+    <source>
+        <url>jdbc:mysql://localhost:3306/test_prod?useUnicode=true&amp;characterEncoding=UTF-8&amp;useOldAliasMetadataBehavior=true</url>
+        <username>root</username>
+        <password>root</password>
+        <dbtype>mysql</dbtype>
+        <driver>com.mysql.jdbc.Driver</driver>
+    </source>
+    <dest>
+        <url>jdbc:oracle:thin:@192.168.175.100:1521:binghe</url>
+        <username>BINGHE</username>
+        <password>BINGHE123</password>
+        <dbtype>oracle</dbtype>
+        <driver>oracle.jdbc.driver.OracleDriver</driver>
+    </dest>
+    <jobs>
+        <job>
+            <name>1</name>
+            <!--每隔30秒执行一次-->
+            <cron>0/5 * * * * ?</cron>
+            <srcSql>select id, username, age, DATE_FORMAT(t_create_time,'%Y-%m-%d %T') as t_create_time from t_user</srcSql>
+            <srcTableFields>id, username, age, t_create_time</srcTableFields>
+            <destTable>A_TEST</destTable>
             <destTableFields>id, username, age, t_create_time</destTableFields>
             <destTableKey>id</destTableKey>
             <destTableUpdate>username, age, t_create_time</destTableUpdate>

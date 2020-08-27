@@ -26,7 +26,7 @@ public class MykitTransferTest {
 
     public static void main(String[] args){
         String path = System.getProperty("user.dir");
-        path = path.replace("\\", "/").concat("/").concat("mykit-db-transfer").concat("/").concat("jobs.xml");
+        path = path.replace("\\", "/").concat("/").concat("mykit-db-transfer").concat("/").concat("mysql_oracle_jobs.xml");
         System.out.println(path);
         DBSyncBuilder.builder().init(path).start();
     }
