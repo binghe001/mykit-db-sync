@@ -47,14 +47,14 @@ jobs.xml
 <root>
     <code>4500000001</code>
     <source>
-        <url>jdbc:mysql://10.2.2.231:3306/test</url>
+        <url>jdbc:mysql://localhost:3306/test_dev?useUnicode=true&amp;characterEncoding=UTF-8&amp;useOldAliasMetadataBehavior=true</url>
         <username>root</username>
         <password>root</password>
         <dbtype>mysql</dbtype>
         <driver>com.mysql.jdbc.Driver</driver>
     </source>
     <dest>
-        <url>jdbc:mysql://127.0.0.1:3306/test</url>
+        <url>jdbc:mysql://localhost:3306/test_prod?useUnicode=true&amp;characterEncoding=UTF-8&amp;useOldAliasMetadataBehavior=true</url>
         <username>root</username>
         <password>root</password>
         <dbtype>mysql</dbtype>
@@ -63,12 +63,14 @@ jobs.xml
     <jobs>
         <job>
             <name>1</name>
-            <cron>0/300 * * * * ?</cron>
-            <srcSql>select user_id, account,password from client_user</srcSql>
-            <destTable>client_user</destTable>
-            <destTableFields>user_id, account, password</destTableFields>
-            <destTableKey>user_id</destTableKey>
-            <destTableUpdate>account, password</destTableUpdate>
+            <!--每隔30秒执行一次-->
+            <cron>0/5 * * * * ?</cron>
+            <srcSql>select id, username, t_age, t_create_time from t_user</srcSql>
+            <srcTableFields>id, username, t_age, t_create_time</srcTableFields>
+            <destTable>t_user</destTable>
+            <destTableFields>id, username, age, t_create_time</destTableFields>
+            <destTableKey>id</destTableKey>
+            <destTableUpdate>username, age, t_create_time</destTableUpdate>
         </job>
     </jobs>
 </root>
@@ -132,8 +134,9 @@ jobs.xml
         <job>
             <name>1</name>
             <!--每隔30秒执行一次-->
-            <cron>0/30 * * * * ?</cron>
+            <cron>0/5 * * * * ?</cron>
             <srcSql>select id, username, age, t_create_time from A_TEST</srcSql>
+            <srcTableFields>id, username, age, t_create_time</srcTableFields>
             <destTable>t_user</destTable>
             <destTableFields>id, username, age, t_create_time</destTableFields>
             <destTableKey>id</destTableKey>

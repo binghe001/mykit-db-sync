@@ -89,7 +89,9 @@ public class DBSyncBuilder extends BaseBuilder {
             // 遍历job即同步的表
             for (@SuppressWarnings("rawtypes")
                  Iterator it = jobs.elementIterator(MykitDbSyncConstants.NODE_JOB); it.hasNext();) {
-                 jobList.add((JobInfo) elementInObject((Element) it.next(), new JobInfo()));
+                JobInfo jobInfo = (JobInfo) elementInObject((Element) it.next(), new JobInfo());
+                //源数据表的字段配置信息不为空
+                jobList.add(jobInfo);
             }
             //
             elementInObject(src, srcDb);

@@ -27,6 +27,8 @@ public class JobInfo extends BaseJobInfo {
 
     //源数据源sql
     private String srcSql;
+    //源数据表字段
+    private String srcTableFields;
     //目标数据表
     private String destTable;
     //目标表数据字段
@@ -35,6 +37,14 @@ public class JobInfo extends BaseJobInfo {
     private String destTableKey;
     //目标表可更新的字段
     private String destTableUpdate;
+
+    public String getSrcTableFields() {
+        return srcTableFields;
+    }
+
+    public void setSrcTableFields(String srcTableFields) {
+        this.srcTableFields = srcTableFields;
+    }
 
     public String getSrcSql() {
         return srcSql;

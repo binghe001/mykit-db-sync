@@ -20,7 +20,8 @@
             <name>1</name>
             <!--每隔30秒执行一次-->
             <cron>0/5 * * * * ?</cron>
-            <srcSql>select id, username, age, t_create_time from t_user</srcSql>
+            <srcSql>select id, username, t_age, t_create_time from t_user</srcSql>
+            <srcTableFields>id, username, t_age, t_create_time</srcTableFields>
             <destTable>t_user</destTable>
             <destTableFields>id, username, age, t_create_time</destTableFields>
             <destTableKey>id</destTableKey>

@@ -15,9 +15,11 @@
  */
 package io.mykit.db.transfer.sync.impl;
 
+import io.mykit.db.common.constants.MykitDbSyncConstants;
+import io.mykit.db.common.utils.StringUtils;
+import io.mykit.db.common.utils.Tool;
 import io.mykit.db.transfer.entity.JobInfo;
 import io.mykit.db.transfer.sync.DBSync;
-import io.mykit.db.common.utils.Tool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,9 +39,15 @@ public class MySQLSync extends AbstractDBSync implements DBSync {
     @Override
     public String assembleSQL(String srcSql, Connection conn, JobInfo jobInfo) throws SQLException {
         String uniqueName = Tool.generateString(6) + "_" + jobInfo.getName();
-        String[] fields = jobInfo.getDestTableFields().split(",");
-        fields = this.trimArrayItem(fields);
-        String[] updateFields = jobInfo.getDestTableUpdate().split(",");
+        String[] destFields = jobInfo.getDestTableFields().split(MykitDbSyncConstants.FIELD_SPLIT);
+        destFields = this.trimArrayItem(destFields);
+        //默认的srcFields数组与destFields相同
+        String[] srcFields = destFields;
+        String srcField = jobInfo.getSrcTableFields();
+        if(!StringUtils.isEmpty(srcField)){
+            srcFields = this.trimArrayItem(srcField.split(MykitDbSyncConstants.FIELD_SPLIT));
+        }
+        String[] updateFields = jobInfo.getDestTableUpdate().split(MykitDbSyncConstants.FIELD_SPLIT);
         updateFields = this.trimArrayItem(updateFields);
         String destTable = jobInfo.getDestTable();
         String destTableKey = jobInfo.getDestTableKey();
@@ -50,12 +58,12 @@ public class MySQLSync extends AbstractDBSync implements DBSync {
         long count = 0;
         while (rs.next()) {
             sql.append("(");
-            for (int index = 0; index < fields.length; index++) {
-                Object fieldValue = rs.getObject(fields[index]);
+            for (int index = 0; index < destFields.length; index++) {
+                Object fieldValue = rs.getObject(srcFields[index]);
                 if (fieldValue == null){
-                    sql.append(fieldValue).append(index == (fields.length - 1) ? "" : ",");
+                    sql.append(fieldValue).append(index == (destFields.length - 1) ? "" : ",");
                 }else{
-                    sql.append("'").append(fieldValue).append(index == (fields.length - 1) ? "'" : "',");
+                    sql.append("'").append(fieldValue).append(index == (destFields.length - 1) ? "'" : "',");
                 }
             }
             sql.append("),");
@@ -69,7 +77,7 @@ public class MySQLSync extends AbstractDBSync implements DBSync {
         }
         if (count > 0) {
             sql = sql.deleteCharAt(sql.length() - 1);
-            if ((!jobInfo.getDestTableUpdate().equals("")) && (!jobInfo.getDestTableKey().equals(""))) {
+            if ((!StringUtils.isEmpty(jobInfo.getDestTableUpdate())) && (!StringUtils.isEmpty(jobInfo.getDestTableKey()))) {
                 sql.append(" on duplicate key update ");
                 for (int index = 0; index < updateFields.length; index++) {
                     sql.append(updateFields[index]).append("= values(").append(updateFields[index]).append(index == (updateFields.length - 1) ? ")" : "),");

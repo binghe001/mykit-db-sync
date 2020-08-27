@@ -23,6 +23,11 @@ package io.mykit.db.common.constants;
 public class MykitDbSyncConstants {
 
     /**
+     * 配置的字段分隔符
+     */
+    public static final String FIELD_SPLIT = ",";
+
+    /**
      * 源数据库
      */
     public static final String TYPE_SOURCE = "source";
