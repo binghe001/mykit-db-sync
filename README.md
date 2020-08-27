@@ -12,14 +12,14 @@ mykit中分离出的强大数据数据库同步工具——mykit-db-sync
 - 如果要定期同步，操作人容易忘记
 - 难以应付频繁变更数据表或者字段
 
-针对以上存在的问题，将珍贵人力从这种重复、无意义的工作中解脱出来，特意开发这个小工具，目前支持MySQL、SQL Server和Oracle数据库的同步
+针对以上存在的问题，将珍贵人力从这种重复、无意义的工作中解脱出来，特意开发这个小工具，目前源数据库为任何支持sql语法的数据库，目标数据库支持MySQL、SQL Server和Oracle数据库
 
 # 主要模块
 ## mykit-db-common
 提供通用的工具类
 
 ## mykit-db-transfer
-MySQL与SQL Server数据互传模块，使用此模块可以实现MySQL和SQL Server数据库之间的数据互传功能
+MySQL、SQL Server和Oracle数据互传模块，使用此模块可以实现MySQL、SQL Server和Oracle数据库之间的数据互传功能
 
 ## mykit-db-oracle
 基于Logminer实现Oracle与Oracle数据库之间的数据传输，支持表结构变化的传输
