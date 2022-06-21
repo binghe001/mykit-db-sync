@@ -12,7 +12,7 @@
     <artifactId>mykit-db-transfer</artifactId>
 
     <properties>
-        <jdbc.version>5.1.22</jdbc.version>
+        <jdbc.version>8.0.28</jdbc.version>
         <mssql.version>6.2.0.jre8</mssql.version>
         <oracle.jdbc.version>12.1.0</oracle.jdbc.version>
     </properties>
